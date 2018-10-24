@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="app-common" />
+        <module name="app-mapper" />
+        <module name="app-pojo" />
+        <module name="app-sso" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="app-common" target="1.8" />
+      <module name="app-mapper" target="1.8" />
+      <module name="app-parent" target="1.8" />
+      <module name="app-pojo" target="1.8" />
+      <module name="app-sso" target="1.8" />
+      <module name="app-test" target="1.8" />
+      <module name="Hbase" target="1.8" />
+      <module name="netty-chat" target="1.8" />
+      <module name="netty-tomcat" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

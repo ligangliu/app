@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="hadoop-1.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../Hello/hadoop/target/hadoop-1.0-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

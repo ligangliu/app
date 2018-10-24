@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../nettytomcat/Hello.iml" filepath="$PROJECT_DIR$/../nettytomcat/Hello.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app.iml" filepath="$PROJECT_DIR$/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app-common/app-common.iml" filepath="$PROJECT_DIR$/app-common/app-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app-mapper/app-mapper.iml" filepath="$PROJECT_DIR$/app-mapper/app-mapper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app-parent/app-parent.iml" filepath="$PROJECT_DIR$/app-parent/app-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app-pojo/app-pojo.iml" filepath="$PROJECT_DIR$/app-pojo/app-pojo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app-sso/app-sso.iml" filepath="$PROJECT_DIR$/app-sso/app-sso.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../nettytomcat/jedis/src/main/main.iml" filepath="$PROJECT_DIR$/../nettytomcat/jedis/src/main/main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../nettytomcat/hadoop/src/main/main1.iml" filepath="$PROJECT_DIR$/../nettytomcat/hadoop/src/main/main1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../nettytomcat/nettytomcat.iml" filepath="$PROJECT_DIR$/../nettytomcat/nettytomcat.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../nettytomcat/hadoop/src/main/java/com/chen/rpc/rpc.iml" filepath="$PROJECT_DIR$/../nettytomcat/hadoop/src/main/java/com/chen/rpc/rpc.iml" />
+    </modules>
+  </component>
+</project>
