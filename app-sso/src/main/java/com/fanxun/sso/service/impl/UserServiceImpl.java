@@ -63,9 +63,9 @@ public class UserServiceImpl implements UserService {
         List<TbUser> users = userMapper.selectByExample(example);
         //表示数据可用
         if (users == null || users.size() == 0){
-            return FanXunResult.build(1000,"数据库中无此数据");
+            return FanXunResult.build(1001,"不存在此记录");
         }
-        return FanXunResult.build(1000,"数据库中已有此数据");
+        return FanXunResult.build(1002,"存在此记录");
     }
 
     @Override
@@ -160,12 +160,30 @@ public class UserServiceImpl implements UserService {
             String json = jedisClient.get(key);
             //判断是否为空
             if (StringUtils.isBlank(json)) {
-                return FanXunResult.build(3000, "此token已经过期，请重新登录");
+                return FanXunResult.build(1003, "该token已经过期或不存在");
             }
             //更新过期时间
             jedisClient.expire(key, REDIS_SESSION_EXPIRE);
             //返回用户信息
             return FanXunResult.ok(JsonUtil.jsonToPojo(json, TbUser.class));
+        } catch (Exception e) {
+            return FanXunResult.build(3000, ExceptionUtil.getStackTrace(e));
+        }
+    }
+
+    @Override
+    public FanXunResult refreshByToken(String token) {
+        try {
+            String key = REDIS_USER_SESSION_KEY + ":" +token;
+            String json = jedisClient.get(key);
+            //判断是否为空
+            if (StringUtils.isBlank(json)) {
+                return FanXunResult.build(1003, "该token已经过期或不存在");
+            }
+            //更新过期时间
+            jedisClient.expire(key, REDIS_SESSION_EXPIRE);
+            //返回用户信息
+            return FanXunResult.build(1000,"页面刷新成功");
         } catch (Exception e) {
             return FanXunResult.build(3000, ExceptionUtil.getStackTrace(e));
         }
@@ -179,7 +197,7 @@ public class UserServiceImpl implements UserService {
             if (reslult == 1){
                 return FanXunResult.build(1000,"用户退出成功");
             }else {
-                return FanXunResult.build(3000,"该token不存在");
+                return FanXunResult.build(1003,"该token已经过期");
             }
         } catch (Exception e) {
             return FanXunResult.build(3000, ExceptionUtil.getStackTrace(e));

@@ -30,7 +30,8 @@
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="com.fanxun.mapper"></property>
 	</bean>
-	
+
+
 	<!-- 自动扫描dao层下的所有 -->
 	<context:component-scan base-package="com.fanxun.sso.dao"></context:component-scan>
 </beans>
