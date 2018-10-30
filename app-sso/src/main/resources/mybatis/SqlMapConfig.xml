@@ -16,6 +16,7 @@
 			<!-- 设置数据库 -->
 			<!-- 该插件目前支持Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL等 -->
 			<!-- <property name="dialect" value="mysql"/> -->
+			<property name="reasonable" value="true"/>
 		</plugin>
 	</plugins>
 </configuration>

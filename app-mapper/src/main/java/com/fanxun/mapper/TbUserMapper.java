@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fanxun.pojo.TbUser;
 import com.fanxun.pojo.TbUserExample;
+import com.fanxun.pojo.UserInfoToPage;
 import org.apache.ibatis.annotations.Param;
 
 public interface TbUserMapper {
@@ -28,4 +29,7 @@ public interface TbUserMapper {
     int updateByPrimaryKeySelective(TbUser record);
 
     int updateByPrimaryKey(TbUser record);
+
+    //自定制查询所有用户信息，其中不需要查询用户密码和用户创建时间
+    List<UserInfoToPage> selectAllUsers();
 }

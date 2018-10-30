@@ -12,6 +12,7 @@
         <option value="$PROJECT_DIR$/app-mapper/pom.xml" />
         <option value="$PROJECT_DIR$/../Hello/Hbase/pom.xml" />
         <option value="$PROJECT_DIR$/app-test/pom.xml" />
+        <option value="$PROJECT_DIR$/app-message/pom.xml" />
       </list>
     </option>
   </component>

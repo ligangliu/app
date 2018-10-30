@@ -7,6 +7,7 @@ package com.fanxun.sso.controller;
 
 import com.fanxun.common.pojo.FanXunResult;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 
 
 @Controller
+@CrossOrigin
 @RequestMapping("error")
 public class ErrorController {
     //private static final String BASE_DIR = "error/";
@@ -22,7 +24,7 @@ public class ErrorController {
     @ResponseBody
     public FanXunResult return400(HttpServletRequest request){
         System.out.println("==================400================");
-        FanXunResult result = FanXunResult.build(3000,"400错误");
+        FanXunResult result = FanXunResult.build(3000,"参数解析异常");
         return result;
     }
     @RequestMapping("404")

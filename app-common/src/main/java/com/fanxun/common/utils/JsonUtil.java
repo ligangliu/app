@@ -86,11 +86,11 @@ public class JsonUtil {
         list.add(arrayList);
         String json2 = JsonUtil.objectToJson(list);
         System.out.println(json2);
-        List<Object> list1 = JsonUtil.jsonToList(json2,Object.class);
-        for (Object object:list1){
-            System.out.println(object);
-
-        }
+//        List<Object> list1 = JsonUtil.jsonToList(json2,Object.class);
+//        for (Object object:list1){
+//            System.out.println(object);
+//
+//        }
 
 
 //        FanXunResult fanXunResult = new FanXunResult();
