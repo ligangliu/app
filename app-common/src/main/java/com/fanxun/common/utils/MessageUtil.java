@@ -19,8 +19,8 @@ public class MessageUtil {
     //产品域名,开发者无需替换
     static final String domain = "dysmsapi.aliyuncs.com";
 
-    static final String accessKeyId = "LTAI00HUMIbej0Sn";
-    static final String accessKeySecret = "NiA0RH25ZyL0boRcESfGj6X4TJqrzD";
+    static final String accessKeyId = "";
+    static final String accessKeySecret = "";
 
     public static String send(String number,String verifyCode){
         System.out.println("-------------------send--------------------------");
