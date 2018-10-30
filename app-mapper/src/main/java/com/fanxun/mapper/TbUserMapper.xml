@@ -8,6 +8,13 @@
     <result column="password" property="password" jdbcType="VARCHAR" />
     <result column="register_date" property="registerDate" jdbcType="DATE" />
   </resultMap>
+
+  <!-- 自定义一个与页面显示用户信息类对应表 -->
+  <resultMap id="UserInfoToPage" type="com.fanxun.pojo.UserInfoToPage" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+  </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -89,6 +96,15 @@
     from tb_user
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <!--
+      自定义查询所有用户信息用户页面分页显示，其中密码和注册时间等字段不需查询，
+      为优化字段传输与查询效率，自定义了一个UserInfoToPage的pojo类
+   -->
+  <select id="selectAllUsers" resultMap="UserInfoToPage">
+     select id,phone,username
+     from tb_user
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from tb_user
     where id = #{id,jdbcType=INTEGER}

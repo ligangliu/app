@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/app.iml" filepath="$PROJECT_DIR$/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app-common/app-common.iml" filepath="$PROJECT_DIR$/app-common/app-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/app-mapper/app-mapper.iml" filepath="$PROJECT_DIR$/app-mapper/app-mapper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app-message/app-message.iml" filepath="$PROJECT_DIR$/app-message/app-message.iml" />
       <module fileurl="file://$PROJECT_DIR$/app-parent/app-parent.iml" filepath="$PROJECT_DIR$/app-parent/app-parent.iml" />
       <module fileurl="file://$PROJECT_DIR$/app-pojo/app-pojo.iml" filepath="$PROJECT_DIR$/app-pojo/app-pojo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app-sso/app-sso.iml" filepath="$PROJECT_DIR$/app-sso/app-sso.iml" />

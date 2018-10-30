@@ -1,4 +1,4 @@
-package com.fanxun.sso.controller;
+package com.fanxun.message.controller;
 
 /**
  * @Author liu

@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="app-common" />
         <module name="app-mapper" />
+        <module name="app-message" />
         <module name="app-pojo" />
         <module name="app-sso" />
       </profile>
@@ -15,6 +16,7 @@
     <bytecodeTargetLevel>
       <module name="app-common" target="1.8" />
       <module name="app-mapper" target="1.8" />
+      <module name="app-message" target="1.8" />
       <module name="app-parent" target="1.8" />
       <module name="app-pojo" target="1.8" />
       <module name="app-sso" target="1.8" />

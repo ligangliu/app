@@ -16,4 +16,5 @@ public interface UserService {
     public FanXunResult userLogout(String token);
     public String sendMessage(String phone);
     public FanXunResult forgetPassword(String phone,String password,String verifyCode,String send_verifyCode);
+    public FanXunResult getAllUserInfo(Integer page,Integer row);
 }

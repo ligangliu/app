@@ -8,8 +8,11 @@ import com.fanxun.common.utils.VerifyCodeUtil;
 import com.fanxun.mapper.TbUserMapper;
 import com.fanxun.pojo.TbUser;
 import com.fanxun.pojo.TbUserExample;
+import com.fanxun.pojo.UserInfoToPage;
 import com.fanxun.sso.dao.JedisClient;
 import com.fanxun.sso.service.UserService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +84,7 @@ public class UserServiceImpl implements UserService {
         //使用spring框架提供的MD5加密密码
         user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
         try {
-            if (send_verifyCode.equals(verifyCode)){
+            if (send_verifyCode.equals(DigestUtils.md5DigestAsHex(verifyCode.getBytes()))){
                 userMapper.insert(user);
                 return FanXunResult.build(1000,"该用户注册成功");
             }else {
@@ -96,7 +99,7 @@ public class UserServiceImpl implements UserService {
     public FanXunResult forgetPassword(String phone, String password, String verifyCode, String send_verifyCode) {
         //userMapper.updateByExampleSelective()
         try {
-            if (send_verifyCode.equals(verifyCode)){
+            if (send_verifyCode.equals(DigestUtils.md5DigestAsHex(verifyCode.getBytes()))){
                 TbUserExample example = new TbUserExample();
                 TbUserExample.Criteria criteria = example.createCriteria();
                 criteria.andPhoneEqualTo(phone);
@@ -189,6 +192,11 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * 用户根据token信息退出
+     * @param token
+     * @return
+     */
     @Override
     public FanXunResult userLogout(String token) {
         try {
@@ -197,18 +205,22 @@ public class UserServiceImpl implements UserService {
             if (reslult == 1){
                 return FanXunResult.build(1000,"用户退出成功");
             }else {
-                return FanXunResult.build(1003,"该token已经过期");
+                return FanXunResult.build(1003,"该token已经过期或不存在");
             }
         } catch (Exception e) {
             return FanXunResult.build(3000, ExceptionUtil.getStackTrace(e));
         }
     }
 
+    /**
+     * 发送验证码
+     * @param phone
+     * @return
+     */
     @Override
     public String sendMessage(String phone) {
         String verifyCode = VerifyCodeUtil.getVerifyCode();
         String result = MessageUtil.send(phone,verifyCode);
-
         if (null != result && result.equals("OK")){
             return verifyCode;
         }else {
@@ -216,4 +228,17 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * 分页查询所有用户信息,并用于页面的显示
+     * @param page
+     * @param row
+     * @return
+     */
+    @Override
+    public FanXunResult getAllUserInfo(Integer page,Integer row) {
+        PageHelper.startPage(page,row);
+        List<UserInfoToPage> userInfoToPages = userMapper.selectAllUsers();
+        PageInfo<UserInfoToPage> pageInfo = new PageInfo<>(userInfoToPages);
+        return FanXunResult.build(1000,"OK",pageInfo);
+    }
 }

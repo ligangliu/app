@@ -43,7 +43,14 @@ public class ParsePostParamsUtil {
         }
         return getPostParams(new String(buffer, charEncoding));
     }
-
+    private static String getJSONString(HttpServletRequest request) throws Exception{
+        byte buffer[] = getRequestPostBytes(request);
+        String charEncoding = request.getCharacterEncoding();
+        if (charEncoding == null) {
+            charEncoding = Charset.defaultCharset().name();
+        }
+        return new String(buffer, charEncoding);
+    }
     private static Map<String,String> getPostParams(String postString){
         //postString = JsonUtil.objectToJson(postString);
 //        System.out.println("=================================");
@@ -65,6 +72,13 @@ public class ParsePostParamsUtil {
         return allParams;
     }
 
+    /**
+     * 获取post请求中得所有参数，并且返回该参数得一个字符串
+     *
+     * @param request
+     * @return
+     * @throws IOException
+     */
 
     private static byte[] getRequestPostBytes(HttpServletRequest request) throws IOException {
         int contentLength = request.getContentLength();

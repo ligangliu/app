@@ -28,9 +28,25 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
+	@RequestMapping(value = "/getAllUsers",method = RequestMethod.GET)
+	@ResponseBody
+	public FanXunResult getAllUsersInfo(@RequestParam(required = false,
+			defaultValue = "1",value = "page")Integer page, @RequestParam(
+			required = false,defaultValue = "10",value = "row")Integer row){
+		System.out.println("================getAllUsersInfo======================");
+		return userService.getAllUserInfo(page,row);
+	}
+
+	/**
+	 * 校验数据，校验用户手机号或者用户名是否已存在
+	 * @param request
+	 * @param param
+	 * @param type
+	 * @return
+	 */
 	@RequestMapping("/checkData")
 	@ResponseBody
-	public Object checkUserInfo(HttpServletRequest request, String param, Integer type) {
+	public FanXunResult checkUserInfo(HttpServletRequest request, String param, Integer type) {
 		System.out.println("===========checkUserInfo============");
 		if ("POST".equalsIgnoreCase(request.getMethod())){
 			String enctype = request.getContentType();
@@ -146,6 +162,15 @@ public class UserController {
 		}
 	}
 
+	/**
+	 * 忘记密码
+	 * @param request
+	 * @param phone
+	 * @param password
+	 * @param verifyCode
+	 * @param send_verifyCode
+	 * @return
+	 */
 	@RequestMapping(value="/forgetPassword",method = RequestMethod.POST)
 	@ResponseBody
 	public FanXunResult forgetPassword(HttpServletRequest request,String phone,String password,String verifyCode,String send_verifyCode){
@@ -257,6 +282,11 @@ public class UserController {
 		return result;
 	}
 
+	/**
+	 * 刷新页面
+	 * @param token
+	 * @return
+	 */
 	@RequestMapping("/refresh/{token}")
 	@ResponseBody
 	public FanXunResult refresh(@PathVariable String token){
@@ -264,7 +294,6 @@ public class UserController {
 		if (token == null || token.equals("")){
 			return FanXunResult.build(3000,"token信息不能为空");
 		}
-
 		FanXunResult result = null;
 		try {
 			result = userService.refreshByToken(token);
@@ -274,4 +303,6 @@ public class UserController {
 		}
 		return result;
 	}
+
+
 }

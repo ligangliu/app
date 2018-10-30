@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fanxun.mapper.TbMessageMapper" >
+  <resultMap id="BaseResultMap" type="com.fanxun.pojo.TbMessage" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="message_uuid" property="messageUuid" jdbcType="VARCHAR" />
+    <result column="message_type" property="messageType" jdbcType="INTEGER" />
+    <result column="message_thema" property="messageThema" jdbcType="VARCHAR" />
+    <result column="message_content" property="messageContent" jdbcType="VARCHAR" />
+    <result column="is_all" property="isAll" jdbcType="INTEGER" />
+    <result column="message_add_time" property="messageAddTime" jdbcType="VARCHAR" />
+    <result column="message_add_userId" property="messageAddUserid" jdbcType="INTEGER" />
+    <result column="subscribe_userId" property="subscribeUserid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, message_uuid, message_type, message_thema, message_content, is_all, message_add_time, 
+    message_add_userId, subscribe_userId
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.fanxun.pojo.TbMessageExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_message
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_message
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <!--
+      自定义查询语句：
+      主要通过用户id去查询属于自己得消息以及属于所有用户得消息
+  -->
+  <select id="selectBySubscribeUserId" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from tb_message
+    where
+    <if test="messageType != 0">
+    message_type = #{messageType,jdbcType=VARCHAR} and
+    </if>
+    is_all = 1 or subscribe_userId=#{subscribeUserId,jdbcType=VARCHAR}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_message
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.fanxun.pojo.TbMessageExample" >
+    delete from tb_message
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.fanxun.pojo.TbMessage" >
+    insert into tb_message (id, message_uuid, message_type, 
+      message_thema, message_content, is_all, 
+      message_add_time, message_add_userId, subscribe_userId
+      )
+    values (#{id,jdbcType=INTEGER}, #{messageUuid,jdbcType=VARCHAR}, #{messageType,jdbcType=INTEGER}, 
+      #{messageThema,jdbcType=VARCHAR}, #{messageContent,jdbcType=VARCHAR}, #{isAll,jdbcType=INTEGER}, 
+      #{messageAddTime,jdbcType=VARCHAR}, #{messageAddUserid,jdbcType=INTEGER}, #{subscribeUserid,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <!-- 自定义批量插入消息 -->
+  <insert id="insertBatch" parameterType="map">
+    insert into tb_message (id, message_uuid, message_type,
+    message_thema, message_content, is_all,
+    message_add_time, message_add_userId, subscribe_userId
+    )
+    values
+    <foreach collection="subscribeUserIds" item="subscribeUserId"  separator=",">
+      (#{message.id,jdbcType=INTEGER}, #{message.messageUuid,jdbcType=VARCHAR}, #{message.messageType,jdbcType=INTEGER},
+      #{message.messageThema,jdbcType=VARCHAR}, #{message.messageContent,jdbcType=VARCHAR}, #{message.isAll,jdbcType=INTEGER},
+      #{message.messageAddTime,jdbcType=VARCHAR}, #{message.messageAddUserid,jdbcType=INTEGER}, #{subscribeUserId,jdbcType=VARCHAR}
+      )
+    </foreach>
+  </insert>
+  <insert id="insertSelective" parameterType="com.fanxun.pojo.TbMessage" >
+    insert into tb_message
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="messageUuid != null" >
+        message_uuid,
+      </if>
+      <if test="messageType != null" >
+        message_type,
+      </if>
+      <if test="messageThema != null" >
+        message_thema,
+      </if>
+      <if test="messageContent != null" >
+        message_content,
+      </if>
+      <if test="isAll != null" >
+        is_all,
+      </if>
+      <if test="messageAddTime != null" >
+        message_add_time,
+      </if>
+      <if test="messageAddUserid != null" >
+        message_add_userId,
+      </if>
+      <if test="subscribeUserid != null" >
+        subscribe_userId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="messageUuid != null" >
+        #{messageUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="messageType != null" >
+        #{messageType,jdbcType=INTEGER},
+      </if>
+      <if test="messageThema != null" >
+        #{messageThema,jdbcType=VARCHAR},
+      </if>
+      <if test="messageContent != null" >
+        #{messageContent,jdbcType=VARCHAR},
+      </if>
+      <if test="isAll != null" >
+        #{isAll,jdbcType=INTEGER},
+      </if>
+      <if test="messageAddTime != null" >
+        #{messageAddTime,jdbcType=VARCHAR},
+      </if>
+      <if test="messageAddUserid != null" >
+        #{messageAddUserid,jdbcType=INTEGER},
+      </if>
+      <if test="subscribeUserid != null" >
+        #{subscribeUserid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.fanxun.pojo.TbMessageExample" resultType="java.lang.Integer" >
+    select count(*) from tb_message
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tb_message
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.messageUuid != null" >
+        message_uuid = #{record.messageUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.messageType != null" >
+        message_type = #{record.messageType,jdbcType=INTEGER},
+      </if>
+      <if test="record.messageThema != null" >
+        message_thema = #{record.messageThema,jdbcType=VARCHAR},
+      </if>
+      <if test="record.messageContent != null" >
+        message_content = #{record.messageContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isAll != null" >
+        is_all = #{record.isAll,jdbcType=INTEGER},
+      </if>
+      <if test="record.messageAddTime != null" >
+        message_add_time = #{record.messageAddTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.messageAddUserid != null" >
+        message_add_userId = #{record.messageAddUserid,jdbcType=INTEGER},
+      </if>
+      <if test="record.subscribeUserid != null" >
+        subscribe_userId = #{record.subscribeUserid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tb_message
+    set id = #{record.id,jdbcType=INTEGER},
+      message_uuid = #{record.messageUuid,jdbcType=VARCHAR},
+      message_type = #{record.messageType,jdbcType=INTEGER},
+      message_thema = #{record.messageThema,jdbcType=VARCHAR},
+      message_content = #{record.messageContent,jdbcType=VARCHAR},
+      is_all = #{record.isAll,jdbcType=INTEGER},
+      message_add_time = #{record.messageAddTime,jdbcType=VARCHAR},
+      message_add_userId = #{record.messageAddUserid,jdbcType=INTEGER},
+      subscribe_userId = #{record.subscribeUserid,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fanxun.pojo.TbMessage" >
+    update tb_message
+    <set >
+      <if test="messageUuid != null" >
+        message_uuid = #{messageUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="messageType != null" >
+        message_type = #{messageType,jdbcType=INTEGER},
+      </if>
+      <if test="messageThema != null" >
+        message_thema = #{messageThema,jdbcType=VARCHAR},
+      </if>
+      <if test="messageContent != null" >
+        message_content = #{messageContent,jdbcType=VARCHAR},
+      </if>
+      <if test="isAll != null" >
+        is_all = #{isAll,jdbcType=INTEGER},
+      </if>
+      <if test="messageAddTime != null" >
+        message_add_time = #{messageAddTime,jdbcType=VARCHAR},
+      </if>
+      <if test="messageAddUserid != null" >
+        message_add_userId = #{messageAddUserid,jdbcType=INTEGER},
+      </if>
+      <if test="subscribeUserid != null" >
+        subscribe_userId = #{subscribeUserid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fanxun.pojo.TbMessage" >
+    update tb_message
+    set message_uuid = #{messageUuid,jdbcType=VARCHAR},
+      message_type = #{messageType,jdbcType=INTEGER},
+      message_thema = #{messageThema,jdbcType=VARCHAR},
+      message_content = #{messageContent,jdbcType=VARCHAR},
+      is_all = #{isAll,jdbcType=INTEGER},
+      message_add_time = #{messageAddTime,jdbcType=VARCHAR},
+      message_add_userId = #{messageAddUserid,jdbcType=INTEGER},
+      subscribe_userId = #{subscribeUserid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
