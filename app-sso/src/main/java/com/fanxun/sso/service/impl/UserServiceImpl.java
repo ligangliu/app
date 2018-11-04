@@ -1,19 +1,14 @@
 package com.fanxun.sso.service.impl;
 
 import com.fanxun.common.pojo.FanXunResult;
-import com.fanxun.common.utils.ExceptionUtil;
-import com.fanxun.common.utils.JsonUtil;
-import com.fanxun.common.utils.MessageUtil;
-import com.fanxun.common.utils.VerifyCodeUtil;
+import com.fanxun.common.utils.*;
 import com.fanxun.mapper.TbUserMapper;
 import com.fanxun.pojo.TbUser;
 import com.fanxun.pojo.TbUserExample;
 import com.fanxun.pojo.UserInfoToPage;
-import com.fanxun.sso.dao.JedisClient;
 import com.fanxun.sso.service.UserService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,9 +30,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private TbUserMapper userMapper;
-
-    @Autowired
-    private JedisClient jedisClient;
 
     @Value("${REDIS_USER_SESSION_KEY}")
     private String REDIS_USER_SESSION_KEY;
@@ -143,8 +135,8 @@ public class UserServiceImpl implements UserService {
             //存放在redis中的用户信息，为了安全，不要存入密码信息
             //保存用户之前，将用户密码清空
             user.setPassword(null);
-            jedisClient.set(key, JsonUtil.objectToJson(user));
-            jedisClient.expire(key, REDIS_SESSION_EXPIRE);
+            JedisUtil.set(key, JsonUtil.objectToJson(user));
+            JedisUtil.expire(key,REDIS_SESSION_EXPIRE);
 
             //将token返回
             HashMap<String, String> map_token = new HashMap<>();
@@ -160,13 +152,13 @@ public class UserServiceImpl implements UserService {
     public FanXunResult getUserByToken(String token) {
         try {
             String key = REDIS_USER_SESSION_KEY + ":" +token;
-            String json = jedisClient.get(key);
+            String json = JedisUtil.get(key);
             //判断是否为空
             if (StringUtils.isBlank(json)) {
                 return FanXunResult.build(1003, "该token已经过期或不存在");
             }
             //更新过期时间
-            jedisClient.expire(key, REDIS_SESSION_EXPIRE);
+            JedisUtil.expire(key,REDIS_SESSION_EXPIRE);
             //返回用户信息
             return FanXunResult.ok(JsonUtil.jsonToPojo(json, TbUser.class));
         } catch (Exception e) {
@@ -178,13 +170,13 @@ public class UserServiceImpl implements UserService {
     public FanXunResult refreshByToken(String token) {
         try {
             String key = REDIS_USER_SESSION_KEY + ":" +token;
-            String json = jedisClient.get(key);
+            String json = JedisUtil.get(key);
             //判断是否为空
             if (StringUtils.isBlank(json)) {
                 return FanXunResult.build(1003, "该token已经过期或不存在");
             }
             //更新过期时间
-            jedisClient.expire(key, REDIS_SESSION_EXPIRE);
+            JedisUtil.expire(key,REDIS_SESSION_EXPIRE);
             //返回用户信息
             return FanXunResult.build(1000,"页面刷新成功");
         } catch (Exception e) {
@@ -201,7 +193,7 @@ public class UserServiceImpl implements UserService {
     public FanXunResult userLogout(String token) {
         try {
             String key = REDIS_USER_SESSION_KEY + ":" +token;
-            int reslult = (int) jedisClient.del(key);
+            int reslult = (int) JedisUtil.del(key);
             if (reslult == 1){
                 return FanXunResult.build(1000,"用户退出成功");
             }else {

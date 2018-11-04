@@ -111,7 +111,7 @@ public class MessageController {
      */
     @RequestMapping(value = "/updateReadStatus" ,method = RequestMethod.GET)
     @ResponseBody
-    public FanXunResult updateReadStatus(String subscribeUserId, @RequestParam("messageUuids")
+        public FanXunResult updateReadStatus(String subscribeUserId, @RequestParam("messageUuids")
             List<String> messageUuids){
         System.out.println("========================updateReadStatus========================");
         System.out.println("subscribeUserId: " + subscribeUserId);

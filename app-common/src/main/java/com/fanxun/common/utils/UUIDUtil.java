@@ -11,9 +11,9 @@ public class UUIDUtil {
         return UUID.randomUUID().toString().replaceAll("-", "");
     }
 
-    public static void main(String[] args) {
-        for (int i = 0; i < 20; i++) {
-            System.out.println(UUIDUtil.getUUID());
-        }
-    }
+//    public static void main(String[] args) {
+//        for (int i = 0; i < 20; i++) {
+//            System.out.println(UUIDUtil.getUUID());
+//        }
+//    }
 }

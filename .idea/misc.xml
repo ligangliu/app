@@ -13,6 +13,8 @@
         <option value="$PROJECT_DIR$/../Hello/Hbase/pom.xml" />
         <option value="$PROJECT_DIR$/app-test/pom.xml" />
         <option value="$PROJECT_DIR$/app-message/pom.xml" />
+        <option value="$PROJECT_DIR$/appt-emplate1/pom.xml" />
+        <option value="$PROJECT_DIR$/app-template1/pom.xml" />
       </list>
     </option>
   </component>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+		PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	
+	<!-- 配置插件 -->
+	<plugins>
+		<!-- 配置分页插件 -->
+		<!--自4.0.0版本以后就不再实现PageHelper这个接口了，
+		转而实现这个接口：org.apache.ibatis.plugin.Interceptor，
+		自4.0.0以后的版本已经可以自动识别数据库了，所以不需要我们再去指定数据库，
+		  -->
+		<!-- <plugin interceptor="com.github.pagehelper.PageHelper"> -->
+		<plugin interceptor="com.github.pagehelper.PageInterceptor">
+			<!-- 设置数据库 -->
+			<!-- 该插件目前支持Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL等 -->
+			<!-- <property name="dialect" value="mysql"/> -->
+			<property name="reasonable" value="true"/>
+		</plugin>
+	</plugins>
+</configuration>

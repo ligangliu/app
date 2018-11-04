@@ -56,12 +56,13 @@
             <artifactId>fastjson</artifactId>
             <version>${fastjson.version}</version>
         </dependency>
+        <!-- 下面的aliyun-sdk-oss所依赖的httpclient产生了冲突，两者版本可能会产生冲突 -->
         <!-- httpclient -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>${httpclient.version}</version>
-        </dependency>
+        </dependency>-->
         <!-- 单元测试 -->
         <dependency>
             <groupId>junit</groupId>
@@ -95,6 +96,12 @@
             <version>${commons-email.vesion}</version>
         </dependency>
 
+        <!-- Redis客户端 -->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>2.9.0</version>
+        </dependency>
         <!-- 腾讯云短信-->
         <dependency>
             <groupId>com.github.qcloudsms</groupId>
