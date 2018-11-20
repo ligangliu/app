@@ -3,6 +3,7 @@ package com.fanxun.sso.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.fanxun.common.pojo.FanXunResult;
+import com.fanxun.common.utils.DateUtil;
 import com.fanxun.common.utils.JsonUtil;
 import com.fanxun.common.utils.ParsePostParamsUtil;
 import com.fanxun.pojo.TbUser;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.*;
@@ -36,30 +38,28 @@ import java.util.*;
 public class TestController {
     @RequestMapping(value = "/test")
     @ResponseBody
-    public String test(HttpServletRequest request,@RequestBody String json){
+    public String test(HttpServletResponse response){
         System.out.println("===================test============");
-        JSONObject jsonObject = JSON.parseObject(json);
-        Set<Map.Entry<String,Object>> set = jsonObject.entrySet();
-        for (Map.Entry<String, Object> entry : jsonObject.entrySet()) {
-            String key = entry.getKey();
-            Object value = entry.getValue();
-            if (value instanceof JSONArray) {
-                System.out.println(key + " --- " + JSON.toJSONString(value));
-            } else {
-                System.out.println(key + " --- " + String.valueOf(value));
-            }
-        }
-        return "xxxxxxx";
+        String date = DateUtil.getDate("yyyy-MM-dd HH:mm:ss");
+        String contentType = response.getHeader("Content-Type");
+        response.setHeader("Content-Type","application/json;charset=UTF-8");
+        String result = contentType + "  系统时间为： " + date;
+        return result;
     }
 
     @RequestMapping(value = "/test1")
     @ResponseBody
-    public String test1(HttpServletRequest request,@RequestBody TbUser user){
-        System.out.println("===================test============");
-        System.out.println(user.getUsername());
-        System.out.println(user.getPassword());
-        return "xxxx";
+    public FanXunResult test1(){
+        String date = DateUtil.getDate("yyyy-MM-dd HH:mm:ss");
+        return FanXunResult.build(1000,"系统时间为：" + date);
     }
 
+
+    @RequestMapping(value = "/test2")
+    @ResponseBody
+    public String test2(){
+        String date = DateUtil.getDate("yyyy-MM-dd HH:mm:ss");
+        return "系统时间为： " + date;
+    }
 
 }

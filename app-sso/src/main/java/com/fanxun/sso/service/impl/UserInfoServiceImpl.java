@@ -24,6 +24,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public FanXunResult createUserInfo(TbUserinfo userinfo) {
+
         TbUserinfoExample example = new TbUserinfoExample();
         TbUserinfoExample.Criteria criteria = example.createCriteria();
         criteria.andPhoneEqualTo(userinfo.getPhone());
@@ -39,9 +40,12 @@ public class UserInfoServiceImpl implements UserInfoService {
             userinfoMapper.insert(userinfo);
             return FanXunResult.build(1000,"预约成功");
         } catch (Exception e) {
-            return FanXunResult.build(3000, ExceptionUtil.getStackTrace(e));
+            System.out.println(e.getMessage());
+            return FanXunResult.build(3000, "数据库异常");
         }
     }
+
+
 
     @Override
     public FanXunResult getUserByPhone(String phone) {

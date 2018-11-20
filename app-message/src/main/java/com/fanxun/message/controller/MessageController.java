@@ -1,7 +1,6 @@
 package com.fanxun.message.controller;
 
 import com.fanxun.common.pojo.FanXunResult;
-import com.fanxun.common.utils.UUIDUtil;
 import com.fanxun.message.service.MessageService;
 import com.fanxun.pojo.TbMessage;
 import org.apache.commons.lang3.StringUtils;
@@ -111,7 +110,7 @@ public class MessageController {
      */
     @RequestMapping(value = "/updateReadStatus" ,method = RequestMethod.GET)
     @ResponseBody
-    public FanXunResult updateReadStatus(String subscribeUserId, @RequestParam("messageUuids")
+        public FanXunResult updateReadStatus(String subscribeUserId, @RequestParam("messageUuids")
             List<String> messageUuids){
         System.out.println("========================updateReadStatus========================");
         System.out.println("subscribeUserId: " + subscribeUserId);

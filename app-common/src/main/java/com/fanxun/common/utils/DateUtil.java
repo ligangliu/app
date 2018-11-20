@@ -174,9 +174,9 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
 	 * @param args
 	 * @throws ParseException
 	 */
-	public static void main(String[] args) throws ParseException {
-		String date = DateUtil.getDate("yyyy-MM-dd HH:mm:ss");
-		System.out.println(date);
-
-	}
+//	public static void main(String[] args) throws ParseException {
+//		String date = DateUtil.getDate("yyyy-MM-dd HH:mm:ss");
+//		System.out.println(date);
+//
+//	}
 }
