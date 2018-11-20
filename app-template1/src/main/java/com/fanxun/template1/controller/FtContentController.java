@@ -2,13 +2,16 @@ package com.fanxun.template1.controller;
 
 import com.fanxun.common.pojo.FanXunResult;
 import com.fanxun.common.utils.OssWebUtil;
+import com.fanxun.common.utils.ParsePostParamsUtil;
 import com.fanxun.pojo.TbFtContent;
+import com.fanxun.template1.dao.TokenDao;
 import com.fanxun.template1.service.FtContentService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -16,18 +19,27 @@ import java.util.Map;
  * @Date 2018-11-02 14:38
  */
 @Controller
-@CrossOrigin
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/ft")
 public class FtContentController {
 
     @Autowired
     private FtContentService contentService;
 
-    @RequestMapping(value = "getSignature",method = RequestMethod.GET)
+    @Autowired
+    private TokenDao tokenDao;
+
+    @RequestMapping(value = "/getSignature",method = RequestMethod.POST)
     @ResponseBody
-    public FanXunResult getSignature(){
+    public FanXunResult getSignature(HttpServletRequest request,String dir){
         System.out.println("==================getSignature=======================");
-        Map<String,String> map = OssWebUtil.getWebParams();
+        try {
+            dir = ParsePostParamsUtil.getJsonPostParams(request).get("dir");
+            System.out.println(dir);
+        }catch (Exception e){
+            return FanXunResult.build(3000,"参数解析异常");
+        }
+
+        Map<String,String> map = OssWebUtil.getWebParams(dir);
         return FanXunResult.build(1000,"ok",map);
     }
 
@@ -36,49 +48,47 @@ public class FtContentController {
      * @param content
      * @return
      */
-    @RequestMapping(value = "insertContent",method = RequestMethod.POST)
+    @RequestMapping(value = "/insertContent",method = RequestMethod.POST)
     @ResponseBody
-    public FanXunResult insertContent(@RequestBody TbFtContent content){
+    public FanXunResult insertContent(HttpServletRequest request,@RequestBody TbFtContent content){
         System.out.println("==================insertContent===========================");
         if (null == content){
             return FanXunResult.build(3000,"参数不能为空");
         }
+
         if (StringUtils.isEmpty(content.getTitle())){
             return FanXunResult.build(3000,"文章标题不能为空");
         }
         if (StringUtils.isEmpty(content.getContent())){
             return FanXunResult.build(3000,"文章内容不能为空");
         }
-        if (null == content.getUid()){
-            return FanXunResult.build(3000,"用户id不能为空");
-        }
         if (null == content.getAppid()){
             return FanXunResult.build(3000,"小程序id不能为空");
         }
+        String token = request.getHeader("token");
+        content.setUid(tokenDao.getUserByToken(token).getId());
         return contentService.insertContent(content);
     }
 
     /**
      * 根据小程序id,用户id,分页获取其拥有的所有文章用户前端展示，
      * @param appId
-     * @param uid
      * @param page
      * @param row
      * @return
      */
-    @RequestMapping(value = "/getAllContent/{appId}/{uid}" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/getAllContent/{appId}" ,method = RequestMethod.GET)
     @ResponseBody
-    public FanXunResult getAllContentsByAppid(@PathVariable Integer appId, @PathVariable Integer uid,
+    public FanXunResult getAllContentsByAppid(HttpServletRequest request,@PathVariable String appId,
                                               @RequestParam(required = false,
                                                       defaultValue = "1",value = "page")Integer page, @RequestParam(
-            required = false,defaultValue = "5",value = "row")Integer row){
+            required = false,defaultValue = "15",value = "row")Integer row){
         System.out.println("==================getAllContentsByAppid=========================");
         if (appId == null){
             return FanXunResult.build(3000,"小程序id不能为空");
         }
-        if (uid == null){
-            return FanXunResult.build(3000,"用户id不能为空");
-        }
+        String token = request.getHeader("token");
+        Integer uid = tokenDao.getUserByToken(token).getId();
         return contentService.getAllContentsByAppid(appId,uid,page,row);
     }
 
@@ -97,56 +107,54 @@ public class FtContentController {
         if (null == content.getCid()){
             return FanXunResult.build(3000,"文章id不能为空");
         }
-        if (null == content.getUid()){
-            return FanXunResult.build(3000,"用户id不能为空");
-        }
-        if (null == content.getAppid()){
-            return FanXunResult.build(3000,"小程序id不能为空");
-        }
+//        if (null == content.getAppid()){
+//            return FanXunResult.build(3000,"小程序id不能为空");
+//        }
         return contentService.updateContent(content);
     }
 
     /**
      * 根据小程序id,用户id,文章id,去将该文章的isSelected字段设置为1
      * 并将上次的cid文章的isSelected字段设置为0
-     * @param appId
-     * @param uid
      * @param cid
      * @param lastSelectedCid
      * @return
      */
-    @RequestMapping(value = "/updateSelected/{appId}/{uid}/{cid}",
+    @RequestMapping(value = "/updateSelected/{cid}",
             method = RequestMethod.GET)
     @ResponseBody
-    public FanXunResult updateContentSelectd(@PathVariable Integer appId,@PathVariable Integer uid,
-                                             @PathVariable Integer cid,Integer lastSelectedCid){
-        if (appId == null){
-            return FanXunResult.build(3000,"小程序id不能为空");
-        }
-        if (uid == null){
-            return FanXunResult.build(3000,"用户id不能为空");
-        }
+    public FanXunResult updateContentSelectd(@PathVariable Integer cid,Integer lastSelectedCid){
+        System.out.println("==================updateContentSelectd=======================");
         if (cid == null){
             return FanXunResult.build(3000,"文章id不能为空");
         }
-        return contentService.updateContentSelectd(appId,uid,cid,lastSelectedCid);
+        return contentService.updateContentSelectd(cid,lastSelectedCid);
     }
 
     /**
      * 根据小程序id,用户id去数据库中加载用户已经选择的文章内容
      * @param appId
-     * @param uid
      * @return
      */
-    @RequestMapping(value = "/getSelected/{appId}/{uid}",method = RequestMethod.GET)
-    public FanXunResult getContentSelected(@PathVariable Integer appId,@PathVariable Integer uid){
+    @RequestMapping(value = "/getSelected/{appId}",
+            method = RequestMethod.GET)
+    @ResponseBody
+    public FanXunResult getContentSelected(HttpServletRequest request,@PathVariable String appId){
+        System.out.println("===================getSelected==========================");
         if (appId == null){
             return FanXunResult.build(3000,"小程序id不能为空");
         }
-        if (uid == null){
-            return FanXunResult.build(3000,"用户id不能为空");
-        }
-        return contentService.getContentSelectd(appId,uid);
+//        String token = request.getHeader("token");
+//        Integer uid = tokenDao.getUserByToken(token).getId();
+        return contentService.getContentSelectd(appId);
+    }
+
+    @RequestMapping(value = "/getContentByCid/{cid}",
+            method = RequestMethod.GET)
+    @ResponseBody
+    public FanXunResult getContentByCid(@PathVariable Integer cid){
+        System.out.println("===================getContentByCid==========================");
+        return contentService.getContentByCid(cid);
     }
 
 }

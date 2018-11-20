@@ -9,7 +9,7 @@ public class FtContentToPage {
 
     private Integer uid;
 
-    private Integer appid;
+    private String appid;
 
     private String title;
 
@@ -31,11 +31,12 @@ public class FtContentToPage {
         this.uid = uid;
     }
 
-    public Integer getAppid() {
+
+    public String getAppid() {
         return appid;
     }
 
-    public void setAppid(Integer appid) {
+    public void setAppid(String appid) {
         this.appid = appid;
     }
 

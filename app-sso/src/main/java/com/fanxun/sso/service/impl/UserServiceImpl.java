@@ -55,12 +55,19 @@ public class UserServiceImpl implements UserService {
         }else if (2 == type){
             criteria.andUsernameEqualTo(content);
         }
-        List<TbUser> users = userMapper.selectByExample(example);
-        //表示数据可用
-        if (users == null || users.size() == 0){
-            return FanXunResult.build(1001,"不存在此记录");
+        try {
+            List<TbUser> users = userMapper.selectByExample(example);
+            //表示数据可用
+            if (users == null || users.size() == 0){
+                return FanXunResult.build(1001,"不存在此记录");
+            }
+            return FanXunResult.build(1002,"存在此记录");
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return FanXunResult.build(3000,"数据库异常");
         }
-        return FanXunResult.build(1002,"存在此记录");
+
+
     }
 
     @Override
@@ -68,7 +75,13 @@ public class UserServiceImpl implements UserService {
         TbUserExample example = new TbUserExample();
         TbUserExample.Criteria criteria = example.createCriteria();
         criteria.andPhoneEqualTo(user.getPhone());
-        List<TbUser> users = userMapper.selectByExample(example);
+        List<TbUser> users = null;
+        try {
+            users = userMapper.selectByExample(example);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return FanXunResult.build(3000,"数据库异常");
+        }
         if (users != null && users.size() >0){
             return FanXunResult.build(3000,"该手机号已注册");
         }
@@ -77,13 +90,20 @@ public class UserServiceImpl implements UserService {
         user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
         try {
             if (send_verifyCode.equals(DigestUtils.md5DigestAsHex(verifyCode.getBytes()))){
-                userMapper.insert(user);
-                return FanXunResult.build(1000,"该用户注册成功");
+                try {
+                    userMapper.insert(user);
+                    return FanXunResult.build(1000,"该用户注册成功");
+                }catch (Exception e){
+                    System.out.println(e.getMessage());
+                    return FanXunResult.build(3000,"数据库异常");
+                }
+
             }else {
                 return FanXunResult.build(3000, "验证码错误");
             }
         } catch (Exception e) {
-            return FanXunResult.build(3000, ExceptionUtil.getStackTrace(e));
+            System.out.println(e.getMessage());
+            return FanXunResult.build(3000, "数据库异常");
         }
     }
 
@@ -107,7 +127,8 @@ public class UserServiceImpl implements UserService {
                 return FanXunResult.build(3000,"验证码错误");
             }
         } catch (Exception e){
-            return FanXunResult.build(3000,ExceptionUtil.getStackTrace(e));
+            System.out.println(e.getMessage());
+            return FanXunResult.build(3000,"数据库异常");
         }
 
     }
@@ -144,7 +165,8 @@ public class UserServiceImpl implements UserService {
             map_token.put("username",user.getUsername());
             return FanXunResult.ok(map_token);
         } catch (Exception e) {
-            return FanXunResult.build(3000, ExceptionUtil.getStackTrace(e));
+            System.out.println(e.getMessage());
+            return FanXunResult.build(3000, "数据库异常");
         }
     }
 
@@ -162,7 +184,8 @@ public class UserServiceImpl implements UserService {
             //返回用户信息
             return FanXunResult.ok(JsonUtil.jsonToPojo(json, TbUser.class));
         } catch (Exception e) {
-            return FanXunResult.build(3000, ExceptionUtil.getStackTrace(e));
+            System.out.println(e.getMessage());
+            return FanXunResult.build(3000, "数据库异常");
         }
     }
 
@@ -180,7 +203,8 @@ public class UserServiceImpl implements UserService {
             //返回用户信息
             return FanXunResult.build(1000,"页面刷新成功");
         } catch (Exception e) {
-            return FanXunResult.build(3000, ExceptionUtil.getStackTrace(e));
+            System.out.println(e.getMessage());
+            return FanXunResult.build(3000, "数据库异常");
         }
     }
 
@@ -200,7 +224,8 @@ public class UserServiceImpl implements UserService {
                 return FanXunResult.build(1003,"该token已经过期或不存在");
             }
         } catch (Exception e) {
-            return FanXunResult.build(3000, ExceptionUtil.getStackTrace(e));
+            System.out.println(e.getMessage());
+            return FanXunResult.build(3000, "redis服务异常");
         }
     }
 
@@ -228,9 +253,14 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public FanXunResult getAllUserInfo(Integer page,Integer row) {
-        PageHelper.startPage(page,row);
-        List<UserInfoToPage> userInfoToPages = userMapper.selectAllUsers();
-        PageInfo<UserInfoToPage> pageInfo = new PageInfo<>(userInfoToPages);
-        return FanXunResult.build(1000,"OK",pageInfo);
+        try {
+            PageHelper.startPage(page,row);
+            List<UserInfoToPage> userInfoToPages = userMapper.selectAllUsers();
+            PageInfo<UserInfoToPage> pageInfo = new PageInfo<>(userInfoToPages);
+            return FanXunResult.build(1000,"OK",pageInfo);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return FanXunResult.build(3000, "redis服务异常");
+        }
     }
 }

@@ -5,7 +5,7 @@ public class TbFtContent {
 
     private Integer uid;
 
-    private Integer appid;
+    private String appid;
 
     private String title;
 
@@ -14,6 +14,8 @@ public class TbFtContent {
     private String createTime;
 
     private String updateTime;
+
+    private Integer isSign;
 
     private Integer isSelected;
 
@@ -35,12 +37,12 @@ public class TbFtContent {
         this.uid = uid;
     }
 
-    public Integer getAppid() {
+    public String getAppid() {
         return appid;
     }
 
-    public void setAppid(Integer appid) {
-        this.appid = appid;
+    public void setAppid(String appid) {
+        this.appid = appid == null ? null : appid.trim();
     }
 
     public String getTitle() {
@@ -73,6 +75,14 @@ public class TbFtContent {
 
     public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime == null ? null : updateTime.trim();
+    }
+
+    public Integer getIsSign() {
+        return isSign;
+    }
+
+    public void setIsSign(Integer isSign) {
+        this.isSign = isSign;
     }
 
     public Integer getIsSelected() {

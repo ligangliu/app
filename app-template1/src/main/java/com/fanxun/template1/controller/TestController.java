@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServletResponse;
  * text/xml
  */
 @Controller
-@CrossOrigin
 @RequestMapping("/api/v1")
 public class TestController {
     @RequestMapping(value = "/test")

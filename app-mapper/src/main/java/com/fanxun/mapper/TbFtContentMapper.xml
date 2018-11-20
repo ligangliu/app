@@ -4,22 +4,22 @@
   <resultMap id="BaseResultMap" type="com.fanxun.pojo.TbFtContent" >
     <id column="cid" property="cid" jdbcType="INTEGER" />
     <result column="uid" property="uid" jdbcType="INTEGER" />
-    <result column="appid" property="appid" jdbcType="INTEGER" />
+    <result column="appid" property="appid" jdbcType="VARCHAR" />
     <result column="title" property="title" jdbcType="VARCHAR" />
     <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="VARCHAR" />
     <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+    <result column="is_sign" property="isSign" jdbcType="INTEGER" />
     <result column="is_selected" property="isSelected" jdbcType="INTEGER" />
     <result column="is_deleted" property="isDeleted" jdbcType="INTEGER" />
   </resultMap>
 
-  <!-- 自定义一个与页面显示用户信息类对应表 -->
   <resultMap id="ContentInfoToPage" type="com.fanxun.pojo.FtContentToPage" >
-      <id column="id" property="id" jdbcType="INTEGER" />
-      <result column="uid" property="uid" jdbcType="INTEGER" />
-      <result column="appid" property="appid" jdbcType="INTEGER" />
-      <result column="title" property="title" jdbcType="VARCHAR" />
-      <result column="content" property="content" jdbcType="VARCHAR" />
+    <id column="cid" property="cid" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
+    <result column="appid" property="appid" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
   </resultMap>
 
   <sql id="Example_Where_Clause" >
@@ -81,7 +81,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    cid, uid, appid, title, content, create_time, update_time, is_selected, is_deleted
+    cid, uid, appid, title, content, create_time, update_time, is_sign, is_selected, 
+    is_deleted
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.fanxun.pojo.TbFtContentExample" >
     select
@@ -97,6 +98,12 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_ft_content
+    where cid = #{cid,jdbcType=INTEGER}
+  </select>
   
   <!-- 
     自定义查询所有文章的内容，其中注册时间，更新时间等字段不需查询，
@@ -106,16 +113,10 @@
      select
     cid, uid, appid, title, content
     from tb_ft_content
-    where appid=#{appId,jdbcType=INTEGER} and uid=#{uid,jdbcType=INTEGER}
+    where appid=#{appId,jdbcType=VARCHAR} and uid=#{uid,jdbcType=INTEGER}
   </select>
   
   
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from tb_ft_content
-    where cid = #{cid,jdbcType=INTEGER}
-  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from tb_ft_content
     where cid = #{cid,jdbcType=INTEGER}
@@ -129,12 +130,12 @@
   <insert id="insert" parameterType="com.fanxun.pojo.TbFtContent" >
     insert into tb_ft_content (cid, uid, appid, 
       title, content, create_time, 
-      update_time, is_selected, is_deleted
-      )
-    values (#{cid,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{appid,jdbcType=INTEGER}, 
+      update_time, is_sign, is_selected, 
+      is_deleted)
+    values (#{cid,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{appid,jdbcType=VARCHAR}, 
       #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=VARCHAR}, #{isSelected,jdbcType=INTEGER}, #{isDeleted,jdbcType=INTEGER}
-      )
+      #{updateTime,jdbcType=VARCHAR}, #{isSign,jdbcType=INTEGER}, #{isSelected,jdbcType=INTEGER}, 
+      #{isDeleted,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.fanxun.pojo.TbFtContent" >
     insert into tb_ft_content
@@ -160,6 +161,9 @@
       <if test="updateTime != null" >
         update_time,
       </if>
+      <if test="isSign != null" >
+        is_sign,
+      </if>
       <if test="isSelected != null" >
         is_selected,
       </if>
@@ -175,7 +179,7 @@
         #{uid,jdbcType=INTEGER},
       </if>
       <if test="appid != null" >
-        #{appid,jdbcType=INTEGER},
+        #{appid,jdbcType=VARCHAR},
       </if>
       <if test="title != null" >
         #{title,jdbcType=VARCHAR},
@@ -188,6 +192,9 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isSign != null" >
+        #{isSign,jdbcType=INTEGER},
       </if>
       <if test="isSelected != null" >
         #{isSelected,jdbcType=INTEGER},
@@ -213,7 +220,7 @@
         uid = #{record.uid,jdbcType=INTEGER},
       </if>
       <if test="record.appid != null" >
-        appid = #{record.appid,jdbcType=INTEGER},
+        appid = #{record.appid,jdbcType=VARCHAR},
       </if>
       <if test="record.title != null" >
         title = #{record.title,jdbcType=VARCHAR},
@@ -226,6 +233,9 @@
       </if>
       <if test="record.updateTime != null" >
         update_time = #{record.updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isSign != null" >
+        is_sign = #{record.isSign,jdbcType=INTEGER},
       </if>
       <if test="record.isSelected != null" >
         is_selected = #{record.isSelected,jdbcType=INTEGER},
@@ -242,25 +252,27 @@
     update tb_ft_content
     set cid = #{record.cid,jdbcType=INTEGER},
       uid = #{record.uid,jdbcType=INTEGER},
-      appid = #{record.appid,jdbcType=INTEGER},
+      appid = #{record.appid,jdbcType=VARCHAR},
       title = #{record.title,jdbcType=VARCHAR},
       content = #{record.content,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=VARCHAR},
       update_time = #{record.updateTime,jdbcType=VARCHAR},
+      is_sign = #{record.isSign,jdbcType=INTEGER},
       is_selected = #{record.isSelected,jdbcType=INTEGER},
       is_deleted = #{record.isDeleted,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-
+  
   <!-- 自定义更新函数，根据文章cid,将is_select字段设置为1 -->
   <update id="updateIsSelectdByCid" parameterType="map" >
     update tb_ft_content
     set is_selected = #{isSelected,jdbcType=INTEGER}
     where cid = #{cid,jdbcType=INTEGER}
   </update>
-
+  
+  
   <update id="updateByPrimaryKeySelective" parameterType="com.fanxun.pojo.TbFtContent" >
     update tb_ft_content
     <set >
@@ -268,7 +280,7 @@
         uid = #{uid,jdbcType=INTEGER},
       </if>
       <if test="appid != null" >
-        appid = #{appid,jdbcType=INTEGER},
+        appid = #{appid,jdbcType=VARCHAR},
       </if>
       <if test="title != null" >
         title = #{title,jdbcType=VARCHAR},
@@ -282,6 +294,9 @@
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=VARCHAR},
       </if>
+      <if test="isSign != null" >
+        is_sign = #{isSign,jdbcType=INTEGER},
+      </if>
       <if test="isSelected != null" >
         is_selected = #{isSelected,jdbcType=INTEGER},
       </if>
@@ -294,11 +309,12 @@
   <update id="updateByPrimaryKey" parameterType="com.fanxun.pojo.TbFtContent" >
     update tb_ft_content
     set uid = #{uid,jdbcType=INTEGER},
-      appid = #{appid,jdbcType=INTEGER},
+      appid = #{appid,jdbcType=VARCHAR},
       title = #{title,jdbcType=VARCHAR},
       content = #{content,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=VARCHAR},
+      is_sign = #{isSign,jdbcType=INTEGER},
       is_selected = #{isSelected,jdbcType=INTEGER},
       is_deleted = #{isDeleted,jdbcType=INTEGER}
     where cid = #{cid,jdbcType=INTEGER}

@@ -14,12 +14,20 @@ import java.util.Set;
 public class JedisSentinelUtil {
     private static JedisSentinelPool sentinelPool = null;
 
-    private static String sentinel1_host = "192.168.230.200";
+    private static String sentinel1_host = "172.18.72.73";
 
     private static Integer sentinel1_port = 26379;
 
+    private static String sentinel2_host = "172.18.72.74";
+
+    private static Integer sentinel2_port = 26379;
+
+    private static String sentinel3_host = "172.18.72.75";
+
+    private static Integer sentinel3_port = 26379;
+
     //当生产环境中，redis中的master与slave都应该配置成相同一个密码。
-    private static String password = null;
+    private static String password = "fanxun123";
 
     private static Integer timeout = 2000;
 
@@ -27,8 +35,8 @@ public class JedisSentinelUtil {
         if(sentinelPool == null) {
             Set<String> sentinels = new HashSet<String>();
             sentinels.add(new HostAndPort(sentinel1_host, sentinel1_port).toString());
-            //sentinels.add(new HostAndPort("192.168.230.201", 27002).toString());
-            //sentinels.add(new HostAndPort("192.168.230.202", 27003).toString());
+            sentinels.add(new HostAndPort(sentinel2_host, sentinel2_port).toString());
+            sentinels.add(new HostAndPort(sentinel3_host, sentinel3_port).toString());
             JedisPoolConfig config = new JedisPoolConfig();
             //控制一个pool可分配多少个jedis实例，通过pool.getResource()来获取；
             //如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted(耗尽)。
@@ -58,7 +66,7 @@ public class JedisSentinelUtil {
         Jedis jedis = null;
         try {
             jedis = sentinelPool.getResource();
-        }catch (JedisConnectionException e){
+        }catch (Exception e){
             System.out.println(e.getMessage());
             try {
                 Thread.sleep(30000);
@@ -81,12 +89,14 @@ public class JedisSentinelUtil {
         return jedis;
     }
 
-//    public static void main(String[] args) {
-//        Set<String> keys = keys("*");
-//        for (String key:keys){
-//            System.out.println(key);
-//        }
-//    }
+    public static void main(String[] args) {
+        System.out.println("Current master: " + sentinelPool.getCurrentHostMaster().toString());
+        Set<String> keys = keys("*");
+        for (String key:keys){
+            System.out.println(key);
+        }
+        System.out.println(JedisSentinelUtil.set("d","1"));
+    }
 
     //*************************************************************
     //redis对于基本操作

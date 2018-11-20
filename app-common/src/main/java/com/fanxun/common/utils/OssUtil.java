@@ -17,11 +17,11 @@ public class OssUtil {
 
     private static String endpoint = "http://oss-cn-shenzhen.aliyuncs.com";
 
-    private static String accessKeyId = "LTAI00pk3hYFrtKz";
+    private static String accessKeyId = "LTAIr2sb5pZkdAJc";
 
-    private static String accessKeySecret = "IrakJslpEvNCD2qzIP3BUNfUihcMa4";
+    private static String accessKeySecret = "pLXJP06lfmZlumIBrSf8gRwagcoNn2";
 
-    private static String bucketName = "jianchu";
+    private static String bucketName = "jianchuapp";
 
     private static OSSClient getOSSClient() {
         ClientConfiguration conf = new ClientConfiguration();
@@ -103,6 +103,7 @@ public class OssUtil {
                 return null;
             }
             BucketInfo info = client.getBucketInfo(bucketName);
+            //System.out.println(info.getBucket());
             return info;
         }catch (OSSException oe) {
             System.out.println("读取bucket信息失败");
@@ -295,12 +296,13 @@ public class OssUtil {
         }
     }
 
-//    public static void main(String[] args) {
+    public static void main(String[] args) {
 //        boolean re = OssUtil.putContent("ftcontent/aa","xxxx");
-//        System.out.println(re);
-//        List<String> keys = OssUtil.getBucketKeys("jianchu");
-//        for (String k:keys){
-//            System.out.println(k);
-//        }
-//    }
+////        System.out.println(re);
+////        List<String> keys = OssUtil.getBucketKeys("jianchu");
+////        for (String k:keys){
+////            System.out.println(k);
+////        }
+      //  OssUtil.getBucketInfo("jianchuapp");
+    }
 }

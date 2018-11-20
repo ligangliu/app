@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 
 
 @Controller
-@CrossOrigin
 @RequestMapping("error")
 public class ErrorController {
     //private static final String BASE_DIR = "error/";

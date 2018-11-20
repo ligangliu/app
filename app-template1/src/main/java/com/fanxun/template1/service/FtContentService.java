@@ -25,13 +25,14 @@ public interface FtContentService {
     //插入一个文章
     public FanXunResult insertContent(TbFtContent content);
     //根据appid分页查看所有文章，把文章标题分页显示出来
-    public FanXunResult getAllContentsByAppid(Integer appId,Integer uid,Integer page, Integer row);
+    public FanXunResult getAllContentsByAppid(String appId,Integer uid,Integer page, Integer row);
     //根据文章cid查看某个文章详细内容
     public FanXunResult getContentByCid(Integer cid);
     //根据appId设置某个小程序默认显示文章
-    public FanXunResult updateContentSelectd(Integer appId,Integer uid,Integer cid,Integer originSelectedCid);
+    public FanXunResult updateContentSelectd(Integer cid,Integer originSelectedCid);
     //根据appId获取其默认的文章
-    public FanXunResult getContentSelectd(Integer appId,Integer uid);
+    public FanXunResult getContentSelectd(String appId);
     //更新文章内容
     public FanXunResult updateContent(TbFtContent content);
+
 }

@@ -18,5 +18,5 @@
 			<!-- <property name="dialect" value="mysql"/> -->
 			<property name="reasonable" value="true"/>
 		</plugin>
-	</plugins>
+</plugins>
 </configuration>

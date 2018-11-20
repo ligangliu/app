@@ -1,11 +1,10 @@
 package com.fanxun.mapper;
 
+import java.util.List;
+
 import com.fanxun.pojo.FtContentToPage;
 import com.fanxun.pojo.TbFtContent;
 import com.fanxun.pojo.TbFtContentExample;
-import java.util.List;
-
-import com.fanxun.pojo.UserInfoToPage;
 import org.apache.ibatis.annotations.Param;
 
 public interface TbFtContentMapper {
@@ -30,13 +29,8 @@ public interface TbFtContentMapper {
     int updateByPrimaryKeySelective(TbFtContent record);
 
     int updateByPrimaryKey(TbFtContent record);
-
-    //自定制查询所有用户信息，其中不需要查询用户密码和用户创建时间
-    List<FtContentToPage> selectAllContents(@Param("appId")Integer appId,@Param("uid") Integer uid);
-
-    //根据appid和cid自定义更新is_select字段
-    int updateIsSelectdByCid(@Param("cid") Integer cid,@Param("isSelected") Integer isSelected);
-
-    //根据appid和cid
-
+    //自定义函数
+    public List<FtContentToPage> selectAllContents(@Param("appId") String appId, @Param("uid") Integer uid);
+    //自定义函数
+    public int updateIsSelectdByCid(@Param("cid") Integer cid,@Param("isSelected") Integer isSelected);
 }

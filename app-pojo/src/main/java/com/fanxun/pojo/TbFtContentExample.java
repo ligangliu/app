@@ -234,52 +234,62 @@ public class TbFtContentExample {
             return (Criteria) this;
         }
 
-        public Criteria andAppidEqualTo(Integer value) {
+        public Criteria andAppidEqualTo(String value) {
             addCriterion("appid =", value, "appid");
             return (Criteria) this;
         }
 
-        public Criteria andAppidNotEqualTo(Integer value) {
+        public Criteria andAppidNotEqualTo(String value) {
             addCriterion("appid <>", value, "appid");
             return (Criteria) this;
         }
 
-        public Criteria andAppidGreaterThan(Integer value) {
+        public Criteria andAppidGreaterThan(String value) {
             addCriterion("appid >", value, "appid");
             return (Criteria) this;
         }
 
-        public Criteria andAppidGreaterThanOrEqualTo(Integer value) {
+        public Criteria andAppidGreaterThanOrEqualTo(String value) {
             addCriterion("appid >=", value, "appid");
             return (Criteria) this;
         }
 
-        public Criteria andAppidLessThan(Integer value) {
+        public Criteria andAppidLessThan(String value) {
             addCriterion("appid <", value, "appid");
             return (Criteria) this;
         }
 
-        public Criteria andAppidLessThanOrEqualTo(Integer value) {
+        public Criteria andAppidLessThanOrEqualTo(String value) {
             addCriterion("appid <=", value, "appid");
             return (Criteria) this;
         }
 
-        public Criteria andAppidIn(List<Integer> values) {
+        public Criteria andAppidLike(String value) {
+            addCriterion("appid like", value, "appid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppidNotLike(String value) {
+            addCriterion("appid not like", value, "appid");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppidIn(List<String> values) {
             addCriterion("appid in", values, "appid");
             return (Criteria) this;
         }
 
-        public Criteria andAppidNotIn(List<Integer> values) {
+        public Criteria andAppidNotIn(List<String> values) {
             addCriterion("appid not in", values, "appid");
             return (Criteria) this;
         }
 
-        public Criteria andAppidBetween(Integer value1, Integer value2) {
+        public Criteria andAppidBetween(String value1, String value2) {
             addCriterion("appid between", value1, value2, "appid");
             return (Criteria) this;
         }
 
-        public Criteria andAppidNotBetween(Integer value1, Integer value2) {
+        public Criteria andAppidNotBetween(String value1, String value2) {
             addCriterion("appid not between", value1, value2, "appid");
             return (Criteria) this;
         }
@@ -561,6 +571,66 @@ public class TbFtContentExample {
 
         public Criteria andUpdateTimeNotBetween(String value1, String value2) {
             addCriterion("update_time not between", value1, value2, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSignIsNull() {
+            addCriterion("is_sign is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSignIsNotNull() {
+            addCriterion("is_sign is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSignEqualTo(Integer value) {
+            addCriterion("is_sign =", value, "isSign");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSignNotEqualTo(Integer value) {
+            addCriterion("is_sign <>", value, "isSign");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSignGreaterThan(Integer value) {
+            addCriterion("is_sign >", value, "isSign");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSignGreaterThanOrEqualTo(Integer value) {
+            addCriterion("is_sign >=", value, "isSign");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSignLessThan(Integer value) {
+            addCriterion("is_sign <", value, "isSign");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSignLessThanOrEqualTo(Integer value) {
+            addCriterion("is_sign <=", value, "isSign");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSignIn(List<Integer> values) {
+            addCriterion("is_sign in", values, "isSign");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSignNotIn(List<Integer> values) {
+            addCriterion("is_sign not in", values, "isSign");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSignBetween(Integer value1, Integer value2) {
+            addCriterion("is_sign between", value1, value2, "isSign");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSignNotBetween(Integer value1, Integer value2) {
+            addCriterion("is_sign not between", value1, value2, "isSign");
             return (Criteria) this;
         }
 

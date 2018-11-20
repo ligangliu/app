@@ -15,17 +15,17 @@ import java.util.Map;
  * @Date 2018-11-02 14:20
  */
 public class OssWebUtil {
-    private static String accessId = "LTAI00pk3hYFrtKz";
-    private static String accessKey = "IrakJslpEvNCD2qzIP3BUNfUihcMa4";
+    private static String accessId = "LTAIr2sb5pZkdAJc";
+    private static String accessKey = "pLXJP06lfmZlumIBrSf8gRwagcoNn2";
     private static String endpoint = "oss-cn-shenzhen.aliyuncs.com";
-    private static String bucket = "jianchu";                    // 请填写您的 bucketname 。
+    private static String bucket = "jianchuapp";                    // 请填写您的 bucketname 。
     private static String host = "http://" + bucket + "." + endpoint; // host的格式为 bucketname.endpoint
 
     // callbackUrl为 上传回调服务器的URL，请将下面的IP和Port配置为您自己的真实信息。
     private static String callbackUrl;
-    private static String dir = "content"; // 用户上传文件时指定的前缀。
+   // private static String dir = "content"; // 用户上传文件时指定的前缀。
 
-    public static Map<String,String> getWebParams(){
+    public static Map<String,String> getWebParams(String dir){
         OSSClient client = new OSSClient(endpoint, accessId, accessKey);
         try {
             long expireTime = 30;
@@ -56,7 +56,7 @@ public class OssWebUtil {
     }
 
 //    public static void main(String[] args) {
-//        Map<String,String> result = OssWebUtil.getWebParams();
+//        Map<String,String> result = OssWebUtil.getWebParams("test");
 //        for (Map.Entry<String,String> entry : result.entrySet()){
 //            System.out.println(entry.getKey() + "---" + entry.getValue());
 //        }

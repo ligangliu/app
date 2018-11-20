@@ -32,4 +32,11 @@
 		<property name="maxUploadSize" value="5242880"></property>
 		<property name="resolveLazily" value="true"/>
 	</bean>-->
+
+	<!-- 配置自定义权限拦截器 -->
+	<mvc:interceptors>
+		<bean class="com.fanxun.template1.interceptor.ResfFulInterceprot"/>
+	</mvc:interceptors>
+
+
 </beans>
